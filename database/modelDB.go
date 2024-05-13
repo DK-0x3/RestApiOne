@@ -4,22 +4,27 @@ import (
 	"database/sql"
 )
 
-type product struct {
-	id          int     `db:"id"`
-	name        string  `db:"name"`
-	price       float64 `db:"price"`
-	discription string  `db:"discription"`
-	idCategory  int     `db:"idCategory"`
+type Product struct {
+	ID          int     `db:"id"`
+	Name        string  `db:"name"`
+	Price       int 	`db:"price"`
+	Discription string  `db:"discription"`
+	IdCategory  int     `db:"idcategory"`
 }
 
-type category struct {
-	id             int     `db:"id"`
-	name           string  `db:"name"`
-	idMainCategory float64 `db:"idMainCategory"`
+type Category struct {
+	ID             int     `db:"id"`
+	Name           string  `db:"name"`
+	IdMainCategory int `db:"idmaincategory"`
 }
 
 type MainCategory struct {
 	ID   int    `db:"id"`
 	Name string `db:"name"`
 	Img  sql.NullString `db:"img"`
+}
+
+type ApiKey struct {
+	Key string `db:"key"`
+	Role string `db:"role"`
 }
