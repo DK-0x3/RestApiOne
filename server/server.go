@@ -12,6 +12,7 @@ import (
 
 
 
+
 func GetMainCategorys(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     var MainCategorys []MainCategoryJ = mainCategoryToMainCategoryJ(database.SelectMainCategoryAll())
