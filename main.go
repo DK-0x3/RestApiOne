@@ -15,6 +15,7 @@ func main() {
 	//fmt.Print(generateRandomString(50))
 	r := mux.NewRouter()
 	r.HandleFunc("/{api}/main", server.GetMainCategorys).Methods("GET")
+	r.HandleFunc("/{api}/mainCat", server.GetMainCategorysAndCategory).Methods("GET")
 	r.HandleFunc("/{api}/main/cat", server.GetCategorys).Methods("GET")
 	r.HandleFunc("/{api}/main/{id}", server.GetCategoryToMainCategoryID).Methods("GET")
 	r.HandleFunc("/{api}/main/cat/{id}", server.GetCategoryID).Methods("GET")

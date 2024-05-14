@@ -14,6 +14,18 @@ import (
 )
 
 // -- MainCategory --
+func mainCategoryToMainCategoryJ(mainCategory []database.MainCategory) []MainCategoryJ {
+	var result []MainCategoryJ
+	
+	for i := 0; i < len(mainCategory); i++ {
+		result = append(result, MainCategoryJ{
+			ID:   mainCategory[i].ID,
+			Name: mainCategory[i].Name,
+			Img:  mainCategory[i].Img.String,
+		})
+	}
+	return result
+}
 
 func GetMainCategorys(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
@@ -21,6 +33,43 @@ func GetMainCategorys(w http.ResponseWriter, r *http.Request) {
 	if (database.GetRoleRequest(params["api"]) == "user" || database.GetRoleRequest(params["api"]) == "admin") {
 		var MainCategorys []MainCategoryJ = mainCategoryToMainCategoryJ(database.SelectMainCategoryAll())
     	json.NewEncoder(w).Encode(MainCategorys)
+	} else {
+		message := ErrorRequest{ErrorMessage: "Нет доступа, необходим API Ключ | There is no access, an API Key is required"}
+		json.NewEncoder(w).Encode(message)
+	}
+}
+
+func GetMainCategorysAndCategory(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	if (database.GetRoleRequest(params["api"]) == "user" || database.GetRoleRequest(params["api"]) == "admin") {
+		var MainCategorys []MainCategoryJ = mainCategoryToMainCategoryJ(database.SelectMainCategoryAll())
+    	var Categorys []CategoryJ = CategoryToCategoryJ(database.SelectCategoryAll())
+		var MainCatAndCat []MainCategoryAndCategoryJ
+		for _, valMain := range MainCategorys {
+			for _, valCat := range Categorys {
+				if valCat.IdMainCategory == valMain.ID {
+					c := 0
+					for ind, valMainAndCat := range MainCatAndCat {
+						if valMainAndCat.ID == valMain.ID {
+							MainCatAndCat[ind].Category = append(valMainAndCat.Category, valCat)
+							c = 1
+							break
+						}
+					}
+					if c == 0 {
+						MainCatAndCat = append(MainCatAndCat, MainCategoryAndCategoryJ{
+						ID: valMain.ID,
+						Name: valMain.Name,
+						Img: valMain.Img,
+						Category: []CategoryJ{valCat},
+						})
+					}
+					
+				}
+			}
+		}
+		json.NewEncoder(w).Encode(MainCatAndCat)
 	} else {
 		message := ErrorRequest{ErrorMessage: "Нет доступа, необходим API Ключ | There is no access, an API Key is required"}
 		json.NewEncoder(w).Encode(message)
@@ -94,21 +143,6 @@ func GetProductToCategoryID(w http.ResponseWriter, r *http.Request) {
 }
 
 
-
-
-
-func mainCategoryToMainCategoryJ(mainCategory []database.MainCategory) []MainCategoryJ {
-	var result []MainCategoryJ
-	
-	for i := 0; i < len(mainCategory); i++ {
-		result = append(result, MainCategoryJ{
-			ID:   mainCategory[i].ID,
-			Name: mainCategory[i].Name,
-			Img:  mainCategory[i].Img.String,
-		})
-	}
-	return result
-}
 func CategoryToCategoryJ(Category []database.Category) []CategoryJ {
 	var result []CategoryJ
 	

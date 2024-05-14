@@ -14,6 +14,13 @@ type MainCategoryJ struct {
 	Img  string `json:"img"`
 }
 
+type MainCategoryAndCategoryJ struct {
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Img      string      `json:"img"`
+	Category []CategoryJ `json:"category"`
+}
+
 type ProductJ struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`

@@ -20,7 +20,7 @@ const (
 )
 
 func InitDB() (err error) {
-	dsn := fmt.Sprintf("host=%s port=%d user=%s " + "password=%s dbname=%s sslmode=disable",
+	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
         					host, port, user, password, dbname)
 	
 	db, err = sqlx.Connect("postgres", dsn)
